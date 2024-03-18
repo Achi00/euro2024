@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AI Imaginarium",
+  title: "Euro 2024",
   description: "Generate images and swap faces in 60 seconds",
 };
 
