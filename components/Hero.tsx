@@ -10,12 +10,14 @@ import page2 from "../utils/page-2.png";
 import page3 from "../utils/page-3.png";
 import img1 from "../utils/football/img1.png";
 import img2 from "../utils/football/img2.png";
+import emailPage from "../utils/email.png";
 import afterUserImg from "../utils/after-user-img.png";
 import { RiErrorWarningLine } from "react-icons/ri";
 import { CiCamera } from "react-icons/ci";
+import { MdEmail } from "react-icons/md";
+import { PiPrinterDuotone } from "react-icons/pi";
 
-import DownloadButton from "./Download";
-import LightBox from "./LightBox";
+import frame from "../utils/frame.png";
 
 import axios from "axios";
 
@@ -79,20 +81,19 @@ const Hero = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   // final image state
-  const [resultImage, setResultImage] = useState<string | null>("");
+  const [resultImage, setResultImage] = useState<string | null>(
+    "https://storage.googleapis.com/imaginarium-bucket/1701200839634-9071327748677547.jpg"
+  );
   // steps for show previous or next jsx element
   const [step, setStep] = useState(1);
 
   // loading
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
   // terms and conditions checking
   const [isChecked, setIsChecked] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [isInfoClosed, setisInfoClosed] = useState(false);
-  // check lightbox
-  const [isOpen, setIsOpen] = useState(false);
   // selected image
   const [selectedImageId, setSelectedImageId] = useState<
     number | undefined | null
@@ -104,11 +105,17 @@ const Hero = () => {
 
   // Handlers for step transitions
   const handleNext = () => {
-    if (step < 4) setStep(step + 1);
+    if (step < 6) setStep(step + 1);
   };
 
-  const handleBack = () => {
-    if (step > 1) setStep(step - 1);
+  const startOver = () => {
+    setStep(1); // Navigate to the prompt input step
+    setResultImage(null);
+    setPrompt("");
+    setImage(null);
+    setImageUrl(undefined);
+    setIsChecked(false);
+    setSelectedImageId(null);
   };
 
   // Function to handle the API response
@@ -218,32 +225,42 @@ const Hero = () => {
       toast.success("Email sent successfully");
       setEmail("");
       setEmailLoading(false);
+      if (step < 6) setStep(step + 1);
     } catch (error) {
       console.error("Failed to send email", error);
       toast.error("Failed to send email");
       setEmailLoading(false);
     }
   };
+  const handlePrint = async (e: any) => {
+    e.preventDefault();
+    setEmailLoading(true); // Assuming you want to indicate loading when print starts
 
-  const startOver = () => {
-    setStep(2); // Navigate to the prompt input step
-    setResultImage(null);
-    setPrompt("");
-    setImage(null);
-    setImageUrl(undefined);
-    setIsChecked(false);
-  };
+    try {
+      // const response = await fetch("http://localhost:8080/v1/print", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     imageUrl: resultImage, // Using the state variable that holds the image URL
+      //   }),
+      // });
 
-  const CloseInfo = () => {
-    setisInfoClosed(true);
-  };
+      // if (!response.ok) {
+      //   throw new Error(`HTTP error! status: ${response.status}`);
+      // }
 
-  const openLightbox = () => {
-    setIsOpen(true);
-  };
-
-  const closeLightbox = () => {
-    setIsOpen(false);
+      // const data = await response.json(); // Assuming your API responds with JSON
+      // console.log(data); // Do something with the data
+      // toast.success("Print initiated successfully"); // Display success message
+      if (step < 6) setStep(step + 1);
+    } catch (error) {
+      console.error("Failed to print", error);
+      toast.error("Failed to print");
+    } finally {
+      setEmailLoading(false); // Turn off loading indication regardless of outcome
+    }
   };
 
   return (
@@ -274,35 +291,34 @@ const Hero = () => {
         {loading && (
           <div className="fadeIn absolute inset-0 min-h-screen z-20 flex w-full justify-center items-center flex-col gap-5">
             <Image src={page3} alt="euro 2024" fill />
-            <div className="relative top-1/3 z-10 min-h-screen">
+            <div className="absolute z-10 top-1/3 flex flex-col items-center gap-3">
               <h1 className="text-[#eee98e] text-center text-4xl">
                 Κάνε λίγο υπομονή!
               </h1>
-            </div>
-            {/* <button
-              disabled
-              type="button"
-              className="py-4 px-8 me-2 text-lg font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 inline-flex items-center"
-            >
-              <svg
-                aria-hidden="true"
-                role="status"
-                className="inline w-8 h-8 me-3 text-gray-200 animate-spin "
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+              <button
+                disabled
+                type="button"
+                className="text-lg px-8 py-4 font-medium text-gray-900 bg-gray-500 rounded-lg items-center justify-center"
               >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="#1C64F2"
-                />
-              </svg>
-              Generating image
-            </button> */}
+                <svg
+                  aria-hidden="true"
+                  role="status"
+                  className="inline w-8 h-8 text-gray-200 animate-spin "
+                  viewBox="0 0 100 101"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                    fill="#1C64F2"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         )}
         {/* password */}
@@ -469,58 +485,123 @@ const Hero = () => {
             ))}
 
           {step === 3 && resultImage && (
-            <div className="flex flex-col gap-5 ">
-              <div className="flex gap-5 xl:flex-row md:flex-row sm:flex-col xs:flex-col">
+            <>
+              <Image src={page2} alt="euro 2024" fill className="absolute" />
+              <div className="flex relative w-full justify-center items-center min-h-screen z-10 top-1/2">
+                <h1 className="text-4xl text-[#eee98e]">
+                  Η φωτογραφία σου είναι έτοιμη!
+                </h1>
+                {resultImage && (
+                  <div className="absolute p-5 h-1/2">
+                    {/* The image that you want to show inside the frame */}
+                    <Image
+                      className="rounded-lg pt-20 cursor-pointer border-3 border-violet-950"
+                      // fill
+                      width={450}
+                      height={450}
+                      // objectFit="cover"
+                      src={`${resultImage}`}
+                      alt="Result"
+                    />
+
+                    {/* The frame overlay */}
+                    <div className="absolute top-0 left-0 right-0 bottom-0">
+                      <Image
+                        className="rounded-lg"
+                        src={frame} // The path to your frame image
+                        width={500}
+                        height={500}
+                        // objectFit="contain"
+                        alt="Frame"
+                      />
+                    </div>
+                  </div>
+                )}
                 <button
-                  className="flex gap-2 items-center bg-violet-500 hover:bg-violet-700 text-white font-bold py-2 px-4 border border-violet-900 rounded-lg"
+                  onClick={handleNext}
+                  disabled={loading}
+                  className="bg-[#00ffff] text-[#003463] text-4xl h-14 p-2 rounded-sm px-5"
+                >
+                  Επόμενο
+                </button>
+              </div>
+            </>
+          )}
+          {step === 4 && resultImage && (
+            <div className="flex flex-col gap-5 ">
+              <Image
+                src={emailPage}
+                alt="euro 2024"
+                fill
+                className="absolute"
+              />
+              <div className="relative z-10 flex items-center justify-center min-h-screen">
+                <div className="flex flex-col justify-center items-center gap-5 w-3/4">
+                  <h1 className="text-white flex text-2xl items-center gap-2">
+                    <MdEmail size={140} />
+                    Στείλε τη φωτογραφία στο e-mail σου και ανέβασέ την στα
+                    social media!
+                  </h1>
+                  <input
+                    type="name"
+                    id="name"
+                    className="bg-transparent border-b border-gray-300 text-white text-2xl block w-full p-2.5 placeholder:text-2xl focus:border-b outline-none"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Όνομα"
+                  />
+                  <input
+                    type="email"
+                    id="email"
+                    className="bg-transparent border-b border-gray-300 text-white text-2xl block w-full p-2.5 placeholder:text-2xl focus:border-b outline-none"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="email"
+                  />
+                  <button
+                    className={`flex gap-2 items-center text-2xl justify-center  text-white font-bold py-2 px-4 w-1/3 ${
+                      !email || !name
+                        ? "bg-gray-500 hover:bg-gray-600 cursor-not-allowed"
+                        : "bg-[#00ffff] "
+                    }`}
+                    type="button"
+                    disabled={!email || emailLoading}
+                    onClick={handleEmail}
+                  >
+                    Αποστολή
+                  </button>
+                  <button
+                    className={`flex gap-2 items-center justify-center  text-white font-bold py-2 px-4 w-full text-2xl bg-[#27a7de]`}
+                    type="button"
+                    onClick={handlePrint}
+                  >
+                    <PiPrinterDuotone />
+                    Εκτύπωσε τη φωτογραφία σου!
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          {step === 5 && (
+            <div className="flex w-full justify-between gap-5">
+              <Image src={page1} alt="euro 2024" fill className="absolute" />
+              <div className="flex-1"></div>
+              <div className="relative z-10 flex justify-center items-center flex-1 h-screen flex-col gap-5">
+                <h1 className="text-4xl text-[#eee98e] text-center">
+                  Συγχαρητήρια.
+                  <br /> Είσαι... πρωταθλητής Ευρώπης!
+                </h1>
+                <button
+                  className="flex gap-2 items-center text-3xl bg-[#3ec5ff] text-[#003463] py-2 px-4"
                   onClick={startOver}
                 >
-                  <Image src={start} alt="start" width={25} height={25} />
-                  Start Over
-                </button>
-                <DownloadButton imageUrl={resultImage} />
-              </div>
-              <div className="flex flex-col gap-2">
-                {/* <label htmlFor="email" className="font-bold">
-                  Email:
-                </label> */}
-                <input
-                  type="email"
-                  id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-violet-700"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                />
-                <button
-                  className={`flex gap-2 items-center justify-center  text-white font-bold py-2 px-4 border border-violet-900 rounded-lg ${
-                    !email
-                      ? "bg-gray-500 hover:bg-gray-600 cursor-not-allowed"
-                      : "bg-violet-500 hover:bg-violet-700"
-                  }`}
-                  type="button"
-                  disabled={!email || emailLoading}
-                  onClick={handleEmail}
-                >
-                  Send Image
+                  Πάμε πάλι;
                 </button>
               </div>
             </div>
           )}
 
           {/* user image preview */}
-
-          {resultImage && (
-            <>
-              <Image
-                className="rounded-lg cursor-pointer border-3 border-violet-950"
-                width={750}
-                height={400}
-                src={resultImage}
-                alt="Result"
-              />
-            </>
-          )}
         </div>
       </div>
     </>
