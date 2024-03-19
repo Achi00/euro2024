@@ -604,11 +604,7 @@ const Test = () => {
                 </div> */}
 
                 <label
-                  className={`flex xl:w-[30vmin] lg:w-[30vmin] md:w-[40vmin] sm:w-full xs:w-full flex-col items-center justify-center  rounded-lg text-center ${
-                    isChecked
-                      ? "bg-violet-600 cursor-pointer "
-                      : "bg-violet-300 cursor-not-allowed"
-                  } `}
+                  className={`flex xl:w-[30vmin] lg:w-[30vmin] md:w-[40vmin] sm:w-full xs:w-full flex-col items-center justify-center  rounded-lg text-center`}
                 >
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <Image src={camera} alt="camera" width={40} height={40} />
@@ -685,7 +681,7 @@ const Test = () => {
                 <div className="absolute p-5 h-1/2">
                   {/* The image that you want to show inside the frame */}
                   <Image
-                    className="rounded-lg pt-20 cursor-pointer border-3 border-violet-950"
+                    className="rounded-lg pt-20 cursor-pointer border-3"
                     // fill
                     width={450}
                     height={450}
