@@ -26,49 +26,49 @@ const imageData = [
     id: 1,
     src: img1,
     alt: "Description for Image 1",
-    prompt: "goalkeeper holding ball",
+    prompt: "superman",
   },
   {
     id: 2,
     src: img2,
     alt: "Description for Image 2",
-    prompt: "goalkeeper holding ball",
+    prompt: "superman",
   },
   {
     id: 3,
     src: img1,
     alt: "Description for Image 1",
-    prompt: "goalkeeper holding ball",
+    prompt: "superman",
   },
   {
     id: 4,
     src: img2,
     alt: "Description for Image 2",
-    prompt: "goalkeeper holding ball",
+    prompt: "superman",
   },
   {
     id: 5,
     src: img1,
     alt: "Description for Image 1",
-    prompt: "goalkeeper holding ball",
+    prompt: "superman",
   },
   {
     id: 6,
     src: img2,
     alt: "Description for Image 2",
-    prompt: "goalkeeper holding ball",
+    prompt: "superman",
   },
   {
     id: 7,
     src: img1,
     alt: "Description for Image 1",
-    prompt: "goalkeeper holding ball",
+    prompt: "superman",
   },
   {
     id: 8,
     src: img2,
     alt: "Description for Image 2",
-    prompt: "goalkeeper holding ball",
+    prompt: "superman",
   },
 ];
 
@@ -81,9 +81,8 @@ const Hero = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   // final image state
-  const [resultImage, setResultImage] = useState<string | null>(
-    "https://storage.googleapis.com/imaginarium-bucket/1701200839634-9071327748677547.jpg"
-  );
+  const [resultImage, setResultImage] = useState<string | null>("");
+  // https://storage.googleapis.com/imaginarium-bucket/1701200839634-9071327748677547.jpg
   // steps for show previous or next jsx element
   const [step, setStep] = useState(1);
 
@@ -101,6 +100,11 @@ const Hero = () => {
 
   const handleSelectImage = (id: number) => {
     setSelectedImageId(id);
+    const selectedImage = imageData.find((image) => image.id === id);
+    if (selectedImage) {
+      setPrompt(selectedImage.prompt);
+    }
+    console.log(prompt);
   };
 
   // Handlers for step transitions
@@ -174,23 +178,20 @@ const Hero = () => {
   };
 
   const handleSubmit = async () => {
-    if (!image) {
-      setErrorMessage("Image missing");
+    if (!image || !prompt) {
+      console.error("Image and prompt are required");
       return;
     }
-
-    // Only show the loading toast after passing the validation checks
 
     const formData = new FormData();
     formData.append("userImage", image);
     formData.append("prompt", prompt);
     formData.append("name", name);
-    // formData.append("email", email);
+
     try {
-      setLoading(true);
-      setErrorMessage("");
+      setLoading(true); // Start loading before the request
       const response = await fetch(
-        "https://abovedigital-1696444393502.ew.r.appspot.com/generate-and-swap-face",
+        "http://localhost:8080/generate-and-swap-face",
         {
           method: "POST",
           body: formData,
@@ -200,9 +201,10 @@ const Hero = () => {
       await handleResponse(response);
       setLoading(false);
     } catch (error) {
-      setLoading(false);
       console.error("Request failed:", error);
       toast.error("An error occurred while processing your request.");
+    } finally {
+      setLoading(false); // Always stop loading after the request is complete
     }
   };
 
@@ -491,32 +493,7 @@ const Hero = () => {
                 <h1 className="text-4xl text-[#eee98e]">
                   Η φωτογραφία σου είναι έτοιμη!
                 </h1>
-                {resultImage && (
-                  <div className="absolute p-5 h-1/2">
-                    {/* The image that you want to show inside the frame */}
-                    <Image
-                      className="rounded-lg pt-20 cursor-pointer border-3 border-violet-950"
-                      // fill
-                      width={450}
-                      height={450}
-                      // objectFit="cover"
-                      src={`${resultImage}`}
-                      alt="Result"
-                    />
 
-                    {/* The frame overlay */}
-                    <div className="absolute top-0 left-0 right-0 bottom-0">
-                      <Image
-                        className="rounded-lg"
-                        src={frame} // The path to your frame image
-                        width={500}
-                        height={500}
-                        // objectFit="contain"
-                        alt="Frame"
-                      />
-                    </div>
-                  </div>
-                )}
                 <button
                   onClick={handleNext}
                   disabled={loading}
@@ -600,7 +577,32 @@ const Hero = () => {
               </div>
             </div>
           )}
+          {resultImage && (
+            <div className="absolute p-5 h-1/2">
+              {/* The image that you want to show inside the frame */}
+              <Image
+                className="rounded-lg pt-20 cursor-pointer border-3 border-violet-950"
+                // fill
+                width={450}
+                height={450}
+                // objectFit="cover"
+                src={`${resultImage}`}
+                alt="Result"
+              />
 
+              {/* The frame overlay */}
+              <div className="absolute top-0 left-0 right-0 bottom-0">
+                <Image
+                  className="rounded-lg"
+                  src={frame} // The path to your frame image
+                  width={500}
+                  height={500}
+                  // objectFit="contain"
+                  alt="Frame"
+                />
+              </div>
+            </div>
+          )}
           {/* user image preview */}
         </div>
       </div>
