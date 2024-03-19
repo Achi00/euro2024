@@ -19,63 +19,80 @@ import bg1 from "../utils/pages/bg1.jpg";
 import bg2 from "../utils/pages/bg2.jpg";
 import bg3 from "../utils/pages/bg3.webp";
 import bg4 from "../utils/pages/bg4.webp";
-import bg5 from "../utils/pages/bg5.webp";
+import bg5 from "../utils/pages/bg5.jpg";
 import bg6 from "../utils/pages/bg6.webp";
-import bg7 from "../utils/pages/bg7.webp";
-import bg8 from "../utils/pages/bg8.webp";
+import bg7 from "../utils/pages/bg7.jpg";
+import bg8 from "../utils/pages/bg8.jpg";
 // buttons
 import btn1 from "../utils/buttons/ btn_next_p1p2.png";
 import btnUpload from "../utils/buttons/btn_upload.png";
+import btnSend from "../utils/buttons/btn_send.png";
 import btnUploadAgain from "../utils/buttons/btn_try_again.png";
+import btnPrint from "../utils/buttons/btn_print.png";
+import startAgain from "../utils/buttons/btn_play_again.png";
+
+import frame from "../utils/frame.png";
+// footbal images
+import { f1, f2, f3, f4, f5, f6, f7, f8 } from "../utils/football/index";
 
 const imageData = [
   {
     id: 1,
-    src: img1,
+    src: f1,
     alt: "Description for Image 1",
+    // prompt:
+    //   "capture realistic a high-tension moment where a male soccer goalkeeper leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1",
     prompt: "superman",
   },
   {
     id: 2,
-    src: img2,
-    alt: "Description for Image 2",
-    prompt: "superman",
+    src: f3,
+    alt: "Description for Image 1",
+    prompt:
+      "female paying soccer sitting in the middle of stadium holding ball, in frantic action on stadium with flashlights, looking at camera, clear non blocking face ligheted, wide angle. Concept of sport, competition, motion, overcoming. Field presence effect, Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 3,
-    src: img1,
-    alt: "Description for Image 1",
-    prompt: "superman",
+    src: f2,
+    alt: "Description for Image 2",
+    prompt:
+      "man soccer player, wearing home uniform, in frantic action on stadium with flashlights, kicking ball for winning goal, looking at camera, clear non blocking face ligheted, wide angle. Concept of sport, competition, motion, overcoming. Field presence effect, Nikon Z9 --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 4,
-    src: img2,
-    alt: "Description for Image 2",
-    prompt: "superman",
+    src: f5,
+    alt: "Description for Image 1",
+    prompt:
+      "woman soccer players sport realistic banner::3 photorealistic::3 backlight::3 --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 5,
-    src: img1,
-    alt: "Description for Image 1",
-    prompt: "superman",
+    src: f4,
+    alt: "Description for Image 2",
+    prompt:
+      "man soccer players sport realistic banner::3 photorealistic::3 backlight::3 --aspect 1:1 --version 6 --quality .5",
   },
+
   {
     id: 6,
-    src: img2,
+    src: f6,
     alt: "Description for Image 2",
-    prompt: "superman",
+    prompt:
+      "Capture a decisive moment right before a penalty kick in a soccer game. The scene zooms in on the female player's face which stands on field alone, showing a mix of concentration and calmness, with eyes fixed on the goal. The background features stadium behind, none behind, all blurred to keep the focus on the player. The stadium's lighting casts dramatic shadows, emphasizing the high stakes of the shot, with the soccer ball at the player's feet, ready to be kicked. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 7,
-    src: img1,
+    src: f7,
     alt: "Description for Image 1",
-    prompt: "superman",
+    prompt:
+      "capture realistic a high-tension moment where a male soccer goalkeeper leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 8,
-    src: img2,
+    src: f8,
     alt: "Description for Image 2",
-    prompt: "superman",
+    prompt:
+      "capture realistic a high-tension moment where a female soccer goalkeeper leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
 ];
 
@@ -88,6 +105,9 @@ const Test = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   // final image state
+  //   const [resultImage, setResultImage] = useState<string | null>(
+  //     "https://storage.googleapis.com/imaginarium-bucket/1701200839634-9071327748677547.jpg"
+  //   );
   const [resultImage, setResultImage] = useState<string | null>("");
   // easy authentication
   const [passcode, setPasscode] = useState("");
@@ -124,35 +144,7 @@ const Test = () => {
     setIsUsingSpeech(!isUsingSpeech); // Toggle between input and speech-to-text
   };
 
-  const verifyPasscode = async () => {
-    try {
-      if (!passcode) {
-        toast.error("Please enter password");
-      } else {
-        const response = await fetch(
-          "https://abovedigital-1696444393502.ew.r.appspot.com/verify-passcode",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ passcode }),
-          }
-        );
-        if (response.ok) {
-          setIsAuthorized(true);
-          setStep(2);
-          if (passcodeInputRef.current) {
-            passcodeInputRef.current.style.border = "initial"; // Reset to initial style
-          }
-          toast.success("Access granted");
-        } else {
-          toast.error("Access denied");
-        }
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error("An error occurred");
-    }
-  };
+  console.log(step);
 
   // Handlers for step transitions
   const handleNext = () => {
@@ -169,6 +161,7 @@ const Test = () => {
       const data = await response.json();
       if (data.imageUrl) {
         setResultImage(data.imageUrl);
+        console.log(resultImage);
         toast.dismiss(); // Dismiss the loading toast
         toast.success("Image generation completed!");
       } else {
@@ -216,8 +209,8 @@ const Test = () => {
     const selectedImage = imageData.find((image) => image.id === id);
     if (selectedImage) {
       setPrompt(selectedImage.prompt);
+      console.log(selectedImage.prompt);
     }
-    console.log(prompt);
   };
   // check name and email
   // const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -244,22 +237,10 @@ const Test = () => {
   };
 
   const handleSubmit = async () => {
-    // Check if all required fields are filled
-    // if (!name || !email || !image || !prompt) {
-    //   toast.error("All fields are required");
-    //   return;
-    // }
     if (!image) {
       setErrorMessage("Image missing");
       return;
     }
-
-    // Simple email validation
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // if (!emailRegex.test(email)) {
-    //   toast.error("Invalid email address");
-    //   return;
-    // }
 
     // Only show the loading toast after passing the validation checks
 
@@ -273,7 +254,7 @@ const Test = () => {
       setPromptInputClass("");
       setErrorMessage("");
       const response = await fetch(
-        "https://abovedigital-1696444393502.ew.r.appspot.com/generate-and-swap-face",
+        "http://localhost:8080/generate-and-swap-face",
         {
           method: "POST",
           body: formData,
@@ -325,7 +306,9 @@ const Test = () => {
       console.log("Email sent successfully", emailResponse.data);
       toast.success("Email sent successfully");
       setEmail("");
+      setName("");
       setEmailLoading(false);
+      setStep(5);
     } catch (error) {
       console.error("Failed to send email", error);
       toast.error("Failed to send email");
@@ -333,13 +316,35 @@ const Test = () => {
     }
   };
 
+  const handlePrint = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/v1/print", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ imageUrl: resultImage }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log(data.message); // Log the response from the server
+    } catch (error) {
+      console.error("There was an error!", error);
+    }
+  };
+
   const startOver = () => {
-    setStep(2); // Navigate to the prompt input step
+    setStep(1); // Navigate to the prompt input step
     setResultImage(null);
     setPrompt("");
     setImage(null);
     setImageUrl(undefined);
     setIsChecked(false);
+    setSelectedImageId(null);
   };
 
   const CloseInfo = () => {
@@ -380,40 +385,20 @@ const Test = () => {
           </div>
         )}
         {loading && (
-          <div className="fadeIn flex w-full justify-center items-center flex-col gap-5">
-            <h2 className="font-bold text-center xl:w-1/4 lg:w-1/4 md:w-1/2 sm:w-1/2 xs:3/4">
-              Our Artificial Intelligence System is Creating image by your
-              imagination, Please be patient, it takes about 60 seconds
-            </h2>
-            <button
-              disabled
-              type="button"
-              className="py-4 px-8 me-2 text-lg font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 inline-flex items-center"
-            >
-              <svg
-                aria-hidden="true"
-                role="status"
-                className="inline w-8 h-8 me-3 text-gray-200 animate-spin "
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="#1C64F2"
-                />
-              </svg>
-              Generating image
-            </button>
+          <div className="absolute inset-0 z-20 w-full min-h-screen">
+            <Image className="absolute inset-0" src={bg5} alt="bg5" fill />
+            <div className="fadeIn relative z-10 flex w-full min-h-screen justify-center items-center flex-col gap-5 pb-80">
+              <div className="relative w-1/4">
+                <div className="w-full h-16 bg-gray-200 overflow-hidden">
+                  <div className="h-full bg-gray-500 progress-bar"></div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
         {/* password */}
         {step === 1 && (
-          <div className="flex flex-col items-center justify-center gap-3 w-full">
+          <div className="flex flex-col fadeIn items-center justify-center gap-3 w-full">
             <Image className="absolute inset-0" src={bg1} alt="bg1" fill />
             <button
               onClick={handleNext}
@@ -437,7 +422,7 @@ const Test = () => {
                       key={index}
                       className={`w-full relative border-4 ${
                         selectedImageId === image.id
-                          ? "border-red-600"
+                          ? "border-red-600 rounded-xl"
                           : "border-transparent"
                       }`}
                       onClick={() => handleSelectImage(image.id)}
@@ -460,7 +445,7 @@ const Test = () => {
                   <Image src={btn1} alt="next" width={250} />
                 </button>
               </div>
-              <input
+              {/* <input
                 type="text"
                 className={`bg-gray-50 border fadeIn border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block xl:w-3/4 lg:w-full md:w-full sm:full xs:w-[150%] p-2.5 outline-violet-700 ${promptInputClass}`}
                 value={prompt}
@@ -473,7 +458,7 @@ const Test = () => {
                 className=" border border-violet-900 p-2 rounded-md text-black"
               >
                 {isUsingSpeech ? "or write your imagination" : "Try Microphone"}
-              </button>
+              </button> */}
             </div>
           )}
           {/* upload image & submit */}
@@ -505,7 +490,8 @@ const Test = () => {
                         disabled={loading}
                       />
                     </label>
-                    <button onClick={handleNext}>
+                    {/* submit api call */}
+                    <button onClick={handleSubmit}>
                       <Image src={btn1} alt="next" width={250} />
                     </button>
                   </div>
@@ -639,75 +625,115 @@ const Test = () => {
               </div>
             ))}
 
-          {step === 3 && resultImage && (
-            <div className="flex flex-col gap-5 ">
-              <div className="flex gap-5 xl:flex-row md:flex-row sm:flex-col xs:flex-col">
-                <button
-                  className="flex gap-2 items-center bg-violet-500 hover:bg-violet-700 text-white font-bold py-2 px-4 border border-violet-900 rounded-lg"
-                  onClick={startOver}
-                >
-                  <Image src={start} alt="start" width={25} height={25} />
-                  Start Over
-                </button>
-                <DownloadButton imageUrl={resultImage} />
+          {step === 4 && resultImage && (
+            <>
+              <Image className="absolute inset-0" src={bg7} alt="bg7" fill />
+              <div className="relative z-10 flex flex-col gap-5 justify-center items-center w-full">
+                {/* <div className="flex gap-5 xl:flex-row md:flex-row sm:flex-col xs:flex-col">
+                  <button
+                    className="flex gap-2 items-center bg-violet-500 hover:bg-violet-700 text-white font-bold py-2 px-4 border border-violet-900 rounded-lg"
+                    onClick={startOver}
+                  >
+                    <Image src={start} alt="start" width={25} height={25} />
+                    Start Over
+                  </button>
+                </div> */}
+                <div className="flex flex-col gap-10 w-[42%]">
+                  <input
+                    type="name"
+                    id="name"
+                    className="bg-transparent border-b text-white border-gray-300 text-3xl outline-none"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Όνομα"
+                  />
+                  <input
+                    type="email"
+                    id="email"
+                    className="bg-transparent border-b text-white border-gray-300 text-3xl outline-none"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="email"
+                  />
+                  <button
+                    className={`flex gap-2 items-center justify-center  text-white font-bold py-2 px-4 bg-transparent pt-5`}
+                    type="button"
+                    disabled={!email || !name || emailLoading}
+                    onClick={handleEmail}
+                  >
+                    <Image src={btnSend} alt="btnSend" width={250} />
+                  </button>
+                  <button
+                    className={`flex gap-2 items-center justify-center  text-white font-bold py-2 px-4 bg-transparent pt-5`}
+                    type="button"
+                    onClick={handlePrint}
+                  >
+                    <Image src={btnPrint} alt="btnSend" width={650} />
+                  </button>
+                </div>
               </div>
-              <div className="flex flex-col gap-2">
-                {/* <label htmlFor="email" className="font-bold">
-                  Email:
-                </label> */}
-                <input
-                  type="email"
-                  id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-violet-700"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                />
-                <button
-                  className={`flex gap-2 items-center justify-center  text-white font-bold py-2 px-4 border border-violet-900 rounded-lg ${
-                    !email
-                      ? "bg-gray-500 hover:bg-gray-600 cursor-not-allowed"
-                      : "bg-violet-500 hover:bg-violet-700"
-                  }`}
-                  type="button"
-                  disabled={!email || emailLoading}
-                  onClick={handleEmail}
-                >
-                  Send Image
-                </button>
-              </div>
-            </div>
+            </>
           )}
 
           {/* user image preview */}
 
-          {resultImage && (
-            <>
-              <Image
-                className="rounded-lg cursor-pointer border-3 border-violet-950"
-                width={750}
-                height={400}
-                src={resultImage}
-                alt="Result"
-                onClick={() => openLightbox()}
-              />
-              {isOpen && (
-                <LightBox isOpen={isOpen} onClose={closeLightbox}>
+          {resultImage && step !== 4 && step !== 5 && (
+            <div className="absolute w-full min-h-screen">
+              <Image className="absolute inset-0" src={bg6} alt="bg6" fill />
+              <div className="relative flex pt-20 items-center justify-center z-10 min-h-screen">
+                <div className="absolute p-5 h-1/2">
+                  {/* The image that you want to show inside the frame */}
                   <Image
-                    className="rounded-lg"
-                    width={750}
-                    height={400}
-                    src={resultImage}
+                    className="rounded-lg pt-20 cursor-pointer border-3 border-violet-950"
+                    // fill
+                    width={450}
+                    height={450}
+                    // objectFit="cover"
+                    src={`${resultImage}`}
                     alt="Result"
                   />
-                </LightBox>
-              )}
-            </>
+
+                  {/* The frame overlay */}
+                  <div className="absolute top-0 left-0 right-0 bottom-0">
+                    <Image
+                      className="rounded-lg"
+                      src={frame} // The path to your frame image
+                      width={500}
+                      height={500}
+                      // objectFit="contain"
+                      alt="Frame"
+                    />
+                  </div>
+                </div>
+                <button
+                  disabled={selectedImageId === null}
+                  onClick={handleNext}
+                  className="absolute left-3/4"
+                >
+                  <Image src={btn1} alt="next" width={250} />
+                </button>
+              </div>
+            </div>
           )}
         </div>
       </div>
-      <div className="flex gap-5 pb-5 pt-2">
-        {/* Navigation Buttons */}
+      {/* <div className="flex"> */}
+      {step === 5 && (
+        <div className="absolute inset-0 z-10 w-full min-h-screen">
+          <Image className="absolute inset-0" src={bg8} alt="bg8" fill />
+
+          <button onClick={startOver}>
+            <Image
+              className="absolute right-[22%] bottom-[45%]"
+              src={startAgain}
+              alt="start again"
+            />
+          </button>
+        </div>
+      )}
+      {/* </div> */}
+      {/* Navigation Buttons */}
+      {/* <div className="flex gap-5 pb-5 pt-2">
         {step > 1 && (step !== 2 || !isAuthorized) && !resultImage && (
           <button
             className={`${
@@ -753,7 +779,7 @@ const Test = () => {
             Submit
           </button>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

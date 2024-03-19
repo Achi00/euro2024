@@ -231,3 +231,14 @@ body {
   height: auto; /* Maintain aspect ratio */
   display: block; /* Remove extra space below the image */
 }
+
+@keyframes fill {
+  to {
+    width: 100%;
+  }
+}
+
+.progress-bar {
+  width: 0; /* Start from 0 */
+  animation: fill 65s linear forwards;
+}
