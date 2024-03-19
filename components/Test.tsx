@@ -1,19 +1,21 @@
 "use client";
 import React, { useEffect, useState, useRef, ChangeEvent } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import SpeechToText from "./SpeechToText";
 import Image from "next/image";
-import Logo from "../utils/Logo.png";
-import camera from "../utils/camera.png";
-import start from "../utils/start.png";
 
-import DownloadButton from "./Download";
-import LightBox from "./LightBox";
+import camera from "../utils/camera.png";
+import {
+  getFirestore,
+  query,
+  collection,
+  where,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "@/app/firebaseConfig";
 
 import axios from "axios";
 
-import img1 from "../utils/football/img1.png";
-import img2 from "../utils/football/img2.png";
 // import { bg1 } from "../utils/pages/index";
 import bg1 from "../utils/pages/bg1.jpg";
 import bg2 from "../utils/pages/bg2.jpg";
@@ -40,23 +42,23 @@ const imageData = [
     id: 1,
     src: f1,
     alt: "Description for Image 1",
-    // prompt:
-    //   "capture realistic a high-tension moment where a male soccer goalkeeper leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1",
-    prompt: "superman",
+    prompt:
+      "capture realistic a high-tension moment where a male soccer goalkeeper which is alone on field leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1",
+    // prompt: "superman",
   },
   {
     id: 2,
     src: f3,
     alt: "Description for Image 1",
     prompt:
-      "female paying soccer sitting in the middle of stadium holding ball, in frantic action on stadium with flashlights, looking at camera, clear non blocking face ligheted, wide angle. Concept of sport, competition, motion, overcoming. Field presence effect, Nikon Z9, --aspect 1:1 --version 6 --quality .5",
+      "female paying soccer sitting in the middle of stadium alone, holding ball, in frantic action on stadium with flashlights, looking at camera, clear non blocking face ligheted, wide angle. Concept of sport, competition, motion, overcoming. Field presence effect, Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 3,
     src: f2,
     alt: "Description for Image 2",
     prompt:
-      "man soccer player, wearing home uniform, in frantic action on stadium with flashlights, kicking ball for winning goal, looking at camera, clear non blocking face ligheted, wide angle. Concept of sport, competition, motion, overcoming. Field presence effect, Nikon Z9 --aspect 1:1 --version 6 --quality .5",
+      "man soccer player standing alone on field, in frantic action on stadium with flashlights, kicking ball for winning goal, looking at camera, clear non blocking face ligheted, wide angle. Concept of sport, competition, motion, overcoming. Field presence effect, Nikon Z9 --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 4,
@@ -85,14 +87,14 @@ const imageData = [
     src: f7,
     alt: "Description for Image 1",
     prompt:
-      "capture realistic a high-tension moment where a male soccer goalkeeper leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
+      "capture realistic a high-tension moment where a male soccer goalkeeper which is alone on field leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 8,
     src: f8,
     alt: "Description for Image 2",
     prompt:
-      "capture realistic a high-tension moment where a female soccer goalkeeper leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
+      "capture realistic a high-tension moment where a female soccer goalkeeper which is alone on field leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
 ];
 
@@ -102,11 +104,11 @@ const Test = () => {
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   // enter fields
   const [prompt, setPrompt] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
+  const [name, setName] = useState<string>("name");
+  const [email, setEmail] = useState<string>("email");
   // final image state
   //   const [resultImage, setResultImage] = useState<string | null>(
-  //     "https://storage.googleapis.com/imaginarium-bucket/1701200839634-9071327748677547.jpg"
+  //     "https://storage.googleapis.com/imaginarium-bucket/1710880377727-7455215612621995.jpg"
   //   );
   const [resultImage, setResultImage] = useState<string | null>("");
   // easy authentication
@@ -159,11 +161,12 @@ const Test = () => {
   const handleResponse = async (response: any) => {
     if (response.ok) {
       const data = await response.json();
+      console.log(data);
       if (data.imageUrl) {
         setResultImage(data.imageUrl);
         console.log(resultImage);
         toast.dismiss(); // Dismiss the loading toast
-        toast.success("Image generation completed!");
+        // toast.success("Image generation completed!");
       } else {
         console.error("URL not found in response");
         toast.error("URL not found in response");
@@ -212,14 +215,6 @@ const Test = () => {
       console.log(selectedImage.prompt);
     }
   };
-  // check name and email
-  // const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setName(e.target.value);
-  // };
-
-  // const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setEmail(e.target.value);
-  // };
 
   // chack image
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -228,7 +223,6 @@ const Test = () => {
       setImage(file);
       setImageUrl(URL.createObjectURL(file));
       setResultImage(null);
-      toast.success("Image selected");
     }
   };
 
@@ -254,7 +248,7 @@ const Test = () => {
       setPromptInputClass("");
       setErrorMessage("");
       const response = await fetch(
-        "http://localhost:8080/generate-and-swap-face",
+        "https://abovedigital-1696444393502.ew.r.appspot.com/generate-and-swap-face",
         {
           method: "POST",
           body: formData,
@@ -263,28 +257,12 @@ const Test = () => {
 
       await handleResponse(response);
       setLoading(false);
+      setName("");
+      setEmail("");
     } catch (error) {
       setLoading(false);
       console.error("Request failed:", error);
       toast.error("An error occurred while processing your request.");
-    }
-  };
-
-  const handleTranscription = (englishTranslation: string) => {
-    setPrompt(englishTranslation);
-    setShoWAudio(englishTranslation);
-  };
-
-  const handleOriginalTranscription = (greekTranscription: string) => {
-    // Handle the Greek transcription here
-    // console.log("Greek Transcription:", greekTranscription);
-  };
-
-  const authorizeError = () => {
-    toast.error("Please authorize first");
-    if (passcodeInputRef.current) {
-      passcodeInputRef.current.style.border = "2px solid red";
-      passcodeInputRef.current.focus();
     }
   };
 
@@ -293,6 +271,8 @@ const Test = () => {
 
     try {
       setEmailLoading(true);
+
+      // Existing code to send email
       const emailResponse = await axios.post(
         "https://abovedigital-1696444393502.ew.r.appspot.com/v1/mail",
         {
@@ -303,15 +283,35 @@ const Test = () => {
         }
       );
 
-      console.log("Email sent successfully", emailResponse.data);
-      toast.success("Email sent successfully");
+      //   console.log("Email sent successfully", emailResponse.data);
+
+      // Firestore: Find the document with the matching imageUrl
+      const imagesCollectionRef = collection(db, "euro2024");
+      const q = query(
+        imagesCollectionRef,
+        where("imageUrl", "==", resultImage)
+      );
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        // Assuming imageUrl is unique and only one document will match
+        const docToUpdate = querySnapshot.docs[0];
+        await updateDoc(docToUpdate.ref, {
+          name: name,
+          email: email,
+        });
+      } else {
+        console.log("No document found with the provided imageUrl");
+      }
+
+      // Reset state and proceed
       setEmail("");
       setName("");
       setEmailLoading(false);
-      setStep(5);
+      setStep(5); // Assuming `setStep` updates some state to control UI flow
     } catch (error) {
-      console.error("Failed to send email", error);
-      toast.error("Failed to send email");
+      console.error("Failed to send email or update document", error);
+      toast.error("Failed to send email or update document");
       setEmailLoading(false);
     }
   };
@@ -338,7 +338,7 @@ const Test = () => {
   };
 
   const startOver = () => {
-    setStep(1); // Navigate to the prompt input step
+    setStep(2); // Navigate to the prompt input step
     setResultImage(null);
     setPrompt("");
     setImage(null);
@@ -464,7 +464,7 @@ const Test = () => {
           {/* upload image & submit */}
           {step === 3 &&
             (resultImage ? null : imageUrl ? (
-              <div className="flex flex-col  gap-10 justify-center items-center">
+              <div className="flex flex-col gap-10 justify-center items-center">
                 <Image className="absolute inset-0" src={bg4} alt="bg4" fill />
                 {!loading && (
                   <div className="flex flex-col gap-10 absolute top-1/3 mt-20 right-56">
@@ -496,7 +496,7 @@ const Test = () => {
                     </button>
                   </div>
                 )}
-                <div className="relative left-24 z-10 w-full flex items-center justify-center">
+                <div className="relative left-16 z-10 w-full flex items-center justify-center mr-24">
                   {!loading && (
                     <img
                       src={imageUrl}
@@ -511,27 +511,26 @@ const Test = () => {
               // Render the image upload section when neither imageUrl nor resultImage is set
               <div className="flex flex-col xl:gap-[5vmin] lg:gap-[5vmin] md:gap-[8vmin] sm:gap-[5vmin] xs:gap-[10vmin]  fadeIn items-center justify-center w-[250px]">
                 <Image className="absolute inset-0" src={bg3} alt="bg3" fill />
-                <div className="relative top-10 left-24">
+                <div className="relative z-20 bottom-28">
                   {/* <Image className="" src={btnUpload} alt="upload" width={80} /> */}
                   <label className="cursor-pointer">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <Image
                         src={btnUpload}
                         alt="camera"
-                        width={80}
-                        height={80}
+                        width={100}
+                        height={100}
                       />
                     </div>
                     <input
                       type="file"
                       accept="image/*"
-                      disabled={!isChecked}
                       onChange={handleImageChange}
                       className="hidden"
                     />
                   </label>
                 </div>
-                <div className="flex flex-col items-center justify-center gap-3">
+                {/* <div className="flex flex-col items-center justify-center gap-3">
                   <div
                     id="alert-1"
                     className={`items-center fadeOut p-4 mb-4 text-white font-bold rounded-lg bg-violet-500  ${
@@ -602,7 +601,7 @@ const Test = () => {
                   <h1 className="font-bold text-center text-lg">
                     Take Selfie Or Upload Image
                   </h1>
-                </div>
+                </div> */}
 
                 <label
                   className={`flex xl:w-[30vmin] lg:w-[30vmin] md:w-[40vmin] sm:w-full xs:w-full flex-col items-center justify-center  rounded-lg text-center ${
@@ -646,6 +645,7 @@ const Test = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Όνομα"
+                    autoComplete="off"
                   />
                   <input
                     type="email"
@@ -654,6 +654,7 @@ const Test = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="email"
+                    autoComplete="off"
                   />
                   <button
                     className={`flex gap-2 items-center justify-center  text-white font-bold py-2 px-4 bg-transparent pt-5`}
