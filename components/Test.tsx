@@ -44,7 +44,6 @@ const imageData = [
     alt: "Description for Image 1",
     prompt:
       "capture realistic a high-tension moment where a male soccer goalkeeper which is alone on field leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1",
-    // prompt: "superman",
   },
   {
     id: 2,
@@ -65,14 +64,14 @@ const imageData = [
     src: f5,
     alt: "Description for Image 1",
     prompt:
-      "woman soccer players sport realistic banner::3 photorealistic::3 backlight::3 --aspect 1:1 --version 6 --quality .5",
+      "woman soccer player, on field alone, sport realistic banner::3 photorealistic::3 backlight::3 --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 5,
     src: f4,
     alt: "Description for Image 2",
     prompt:
-      "man soccer players sport realistic banner::3 photorealistic::3 backlight::3 --aspect 1:1 --version 6 --quality .5",
+      "man soccer player, on field alone, sport realistic banner::3 photorealistic::3 backlight::3 --aspect 1:1 --version 6 --quality .5",
   },
 
   {
@@ -141,8 +140,6 @@ const Test = () => {
     setIsUsingSpeech(!isUsingSpeech); // Toggle between input and speech-to-text
   };
 
-  console.log(step);
-
   // Handlers for step transitions
   const handleNext = () => {
     if (step < 8) setStep(step + 1);
@@ -152,10 +149,8 @@ const Test = () => {
   const handleResponse = async (response: any) => {
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       if (data.imageUrl) {
         setResultImage(data.imageUrl);
-        console.log(resultImage);
         toast.dismiss(); // Dismiss the loading toast
         // toast.success("Image generation completed!");
       } else {
@@ -203,7 +198,6 @@ const Test = () => {
     const selectedImage = imageData.find((image) => image.id === id);
     if (selectedImage) {
       setPrompt(selectedImage.prompt);
-      console.log(selectedImage.prompt);
     }
   };
 
@@ -240,6 +234,7 @@ const Test = () => {
       setErrorMessage("");
       const response = await fetch(
         "https://abovedigital-1696444393502.ew.r.appspot.com/generate-and-swap-face",
+        // "http://localhost:8080/generate-and-swap-face",
         {
           method: "POST",
           body: formData,
@@ -268,7 +263,7 @@ const Test = () => {
         "https://abovedigital-1696444393502.ew.r.appspot.com/v1/mail",
         {
           toEmail: email,
-          subject: "AI Imaginarium",
+          subject: "Unilever Euro 2024",
           message: "Your Generated Image",
           imageUrl: resultImage,
         }
@@ -323,7 +318,6 @@ const Test = () => {
       }
 
       const data = await response.json();
-      console.log(data.message); // Log the response from the server
       // Enable the button after 10 seconds
       setTimeout(() => setIsPrintDisabled(false), 10000);
     } catch (error) {
@@ -661,20 +655,20 @@ const Test = () => {
             <div className="absolute w-full min-h-screen">
               <Image className="absolute inset-0" src={bg6} alt="bg6" fill />
               <div className="relative flex pt-20 items-center justify-center z-10 min-h-screen">
-                <div className="absolute p-5 h-1/2">
+                <div className="absolute pb-10 h-1/2">
                   {/* The image that you want to show inside the frame */}
                   <Image
-                    className="rounded-lg pt-20 cursor-pointer border-3"
+                    className="rounded-lg"
                     // fill
-                    width={450}
-                    height={450}
+                    width={430}
+                    height={430}
                     // objectFit="cover"
                     src={`${resultImage}`}
                     alt="Result"
                   />
 
                   {/* The frame overlay */}
-                  <div className="absolute top-0 left-0 right-0 bottom-0">
+                  {/* <div className="absolute top-0 left-0 right-0 bottom-0">
                     <Image
                       className="rounded-lg"
                       src={frame} // The path to your frame image
@@ -683,7 +677,7 @@ const Test = () => {
                       // objectFit="contain"
                       alt="Frame"
                     />
-                  </div>
+                  </div> */}
                 </div>
                 <button
                   disabled={selectedImageId === null}
