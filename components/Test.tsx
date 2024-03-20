@@ -112,25 +112,20 @@ const Test = () => {
   //   );
   const [resultImage, setResultImage] = useState<string | null>("");
   // easy authentication
-  const [passcode, setPasscode] = useState("");
-  const [isAuthorized, setIsAuthorized] = useState(true);
   // steps for show previous or next jsx element
   const [step, setStep] = useState(1);
   // input and microphone togle state
   const [isUsingSpeech, setIsUsingSpeech] = useState(false);
-  // show audio text
-  const [showAudio, setShoWAudio] = useState("");
   // loading
   const [loading, setLoading] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
-  const passcodeInputRef = useRef<HTMLInputElement>(null);
   // terms and conditions checking
   const [isChecked, setIsChecked] = useState(true);
 
   const [errorMessage, setErrorMessage] = useState("");
   const [isInfoClosed, setisInfoClosed] = useState(false);
   // check lightbox
-  const [isOpen, setIsOpen] = useState(false);
+  const [isPrintDisabled, setIsPrintDisabled] = useState(false);
 
   // change prompt input stlye in case of inappropriate prompt
   const [promptInputClass, setPromptInputClass] =
@@ -151,10 +146,6 @@ const Test = () => {
   // Handlers for step transitions
   const handleNext = () => {
     if (step < 8) setStep(step + 1);
-  };
-
-  const handleBack = () => {
-    if (step > 1) setStep(step - 1);
   };
 
   // Function to handle the API response
@@ -318,6 +309,7 @@ const Test = () => {
 
   const handlePrint = async () => {
     try {
+      setIsPrintDisabled(true);
       const response = await fetch("http://localhost:8080/v1/print", {
         method: "POST",
         headers: {
@@ -332,31 +324,21 @@ const Test = () => {
 
       const data = await response.json();
       console.log(data.message); // Log the response from the server
+      // Enable the button after 10 seconds
+      setTimeout(() => setIsPrintDisabled(false), 10000);
     } catch (error) {
       console.error("There was an error!", error);
     }
   };
 
   const startOver = () => {
-    setStep(2); // Navigate to the prompt input step
+    setStep(1); // Navigate to the prompt input step
     setResultImage(null);
     setPrompt("");
     setImage(null);
     setImageUrl(undefined);
     setIsChecked(false);
     setSelectedImageId(null);
-  };
-
-  const CloseInfo = () => {
-    setisInfoClosed(true);
-  };
-
-  const openLightbox = () => {
-    setIsOpen(true);
-  };
-
-  const closeLightbox = () => {
-    setIsOpen(false);
   };
 
   return (
@@ -664,6 +646,7 @@ const Test = () => {
                     className={`flex gap-2 items-center justify-center  text-white font-bold py-2 px-4 bg-transparent pt-5`}
                     type="button"
                     onClick={handlePrint}
+                    disabled={isPrintDisabled}
                   >
                     <Image src={btnPrint} alt="btnSend" width={650} />
                   </button>
