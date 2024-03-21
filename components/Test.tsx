@@ -318,13 +318,16 @@ const Test = () => {
   const handlePrint = async () => {
     try {
       setIsPrintDisabled(true);
-      const response = await fetch("http://localhost:8080/v1/print", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ imageUrl: resultImage }),
-      });
+      const response = await fetch(
+        "https://abovedigital-1696444393502.ew.r.appspot.com/v1/print",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ imageUrl: resultImage }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -429,7 +432,9 @@ const Test = () => {
                 <button
                   disabled={selectedImageId === null}
                   onClick={handleNext}
-                  className="relative top-20"
+                  className={`relative top-16 ${
+                    selectedImageId === null ? "opacity-50" : "opacity-100"
+                  }`}
                 >
                   <Image src={btn1} alt="next" width={200} />
                 </button>
@@ -459,16 +464,12 @@ const Test = () => {
                   <div className="flex flex-col gap-10 absolute top-1/3 mt-20 right-56">
                     {/* upload again button */}
                     <label className="cursor-pointer">
-                      {/* <div className="flex flex-col items-center justify-center pt-5 pb-6"> */}
                       <Image
                         src={btnUploadAgain}
                         alt="camera"
                         width={250}
                         height={30}
                       />
-                      {/* </div> */}
-
-                      {/* <h1 className="font-bold text-white">Upload Again</h1> */}
 
                       {/* prompt input */}
                       <input
@@ -503,7 +504,7 @@ const Test = () => {
                 <div className="relative z-20 bottom-28">
                   {/* <Image className="" src={btnUpload} alt="upload" width={80} /> */}
                   <label className="cursor-pointer">
-                    <div className="flex flex-col items-center justify-center pt-12">
+                    <div className="flex flex-col items-center justify-center pt-16">
                       <Image
                         src={btnUpload}
                         alt="camera"
@@ -684,7 +685,7 @@ const Test = () => {
                     <LightBox isOpen={isOpen} onClose={closeLightbox}>
                       <Image
                         className="rounded-lg"
-                        width={750}
+                        width={670}
                         height={400}
                         src={resultImage}
                         alt="Result"

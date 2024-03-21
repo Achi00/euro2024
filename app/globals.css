@@ -208,7 +208,7 @@ body {
   position: relative;
   margin: auto; /* Centers the content */
   padding: 20px;
-  max-width: 150%; /* Adjusts to the viewport */
+  max-width: 100%; /* Adjusts to the viewport */
   /* max-height: 120vh; */
   overflow: hidden; /* Adds scroll for large content */
 }
