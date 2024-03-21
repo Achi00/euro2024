@@ -391,7 +391,7 @@ const Test = () => {
             <Image className="absolute inset-0" src={bg1} alt="bg1" fill />
             <button
               onClick={handleNext}
-              className="absolute z-10 bottom-1/3 right-1/4"
+              className="absolute z-10 bottom-1/3 right-[20%]"
             >
               <Image src={btn1} alt="next" width={250} />
             </button>
