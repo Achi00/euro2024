@@ -36,6 +36,7 @@ import startAgain from "../utils/buttons/btn_play_again.png";
 import frame from "../utils/frame.png";
 // footbal images
 import { f1, f2, f3, f4, f5, f6, f7, f8 } from "../utils/football/index";
+import LightBox from "./LightBox";
 
 const imageData = [
   {
@@ -43,35 +44,35 @@ const imageData = [
     src: f1,
     alt: "Description for Image 1",
     prompt:
-      "capture realistic a high-tension moment where a male soccer goalkeeper which is alone on field leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1",
+      "capture realistic a high-tension moment where a white male soccer goalkeeper which is alone on field leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1",
   },
   {
     id: 2,
     src: f3,
     alt: "Description for Image 1",
     prompt:
-      "female paying soccer sitting in the middle of stadium alone, holding ball, in frantic action on stadium with flashlights, looking at camera, clear non blocking face ligheted, wide angle. Concept of sport, competition, motion, overcoming. Field presence effect, Nikon Z9, --aspect 1:1 --version 6 --quality .5",
+      "white female paying soccer sitting in the middle of stadium alone, holding ball, in frantic action on stadium with flashlights, looking at camera, clear non blocking face ligheted, wide angle. Concept of sport, competition, motion, overcoming. Field presence effect, Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 3,
     src: f2,
     alt: "Description for Image 2",
     prompt:
-      "man soccer player standing alone on field, in frantic action on stadium with flashlights, kicking ball for winning goal, looking at camera, clear non blocking face ligheted, wide angle. Concept of sport, competition, motion, overcoming. Field presence effect, Nikon Z9 --aspect 1:1 --version 6 --quality .5",
+      "white man soccer player standing alone on field, in frantic action on stadium with flashlights, kicking ball for winning goal, looking at camera, clear non blocking face ligheted, wide angle. Concept of sport, competition, motion, overcoming. Field presence effect, Nikon Z9 --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 4,
     src: f5,
     alt: "Description for Image 1",
     prompt:
-      "woman soccer player, on field alone, sport realistic banner::3 photorealistic::3 backlight::3 --aspect 1:1 --version 6 --quality .5",
+      "white woman soccer player, on field alone, sport realistic banner::3 photorealistic::3 backlight::3 --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 5,
     src: f4,
     alt: "Description for Image 2",
     prompt:
-      "man soccer player, on field alone, sport realistic banner::3 photorealistic::3 backlight::3 --aspect 1:1 --version 6 --quality .5",
+      "white man soccer player, on field alone, sport realistic banner::3 photorealistic::3 backlight::3 --aspect 1:1 --version 6 --quality .5",
   },
 
   {
@@ -79,21 +80,21 @@ const imageData = [
     src: f6,
     alt: "Description for Image 2",
     prompt:
-      "Capture a decisive moment right before a penalty kick in a soccer game. The scene zooms in on the female player's face which stands on field alone, showing a mix of concentration and calmness, with eyes fixed on the goal. The background features stadium behind, none behind, all blurred to keep the focus on the player. The stadium's lighting casts dramatic shadows, emphasizing the high stakes of the shot, with the soccer ball at the player's feet, ready to be kicked. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
+      "Capture a decisive moment right before a penalty kick in a soccer game. The scene zooms in on the white female player's face which stands on field alone, showing a mix of concentration and calmness, with eyes fixed on the goal. The background features stadium behind, none behind, all blurred to keep the focus on the player. The stadium's lighting casts dramatic shadows, emphasizing the high stakes of the shot, with the soccer ball at the player's feet, ready to be kicked. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 7,
     src: f7,
     alt: "Description for Image 1",
     prompt:
-      "capture realistic a high-tension moment where a male soccer goalkeeper which is alone on field leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
+      "capture realistic a high-tension moment where a white male soccer goalkeeper which is alone on field leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 8,
     src: f8,
     alt: "Description for Image 2",
     prompt:
-      "capture realistic a high-tension moment where a female soccer goalkeeper which is alone on field leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
+      "capture realistic a high-tension moment where a white female soccer goalkeeper which is alone on field leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
 ];
 
@@ -140,9 +141,20 @@ const Test = () => {
     setIsUsingSpeech(!isUsingSpeech); // Toggle between input and speech-to-text
   };
 
+  // check lightbox
+  const [isOpen, setIsOpen] = useState(false);
+
   // Handlers for step transitions
   const handleNext = () => {
     if (step < 8) setStep(step + 1);
+  };
+
+  const openLightbox = () => {
+    setIsOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setIsOpen(false);
   };
 
   // Function to handle the API response
@@ -391,7 +403,7 @@ const Test = () => {
           {step === 2 && (
             <div className="flex fadeIn justify-center flex-col items-center w-full gap-4 p-3">
               <Image className="absolute inset-0" src={bg2} alt="bg1" fill />
-              <div className="relative z-10 top-40 flex flex-col items-center justify-center">
+              <div className="relative z-10 top-20 flex flex-col items-center justify-center">
                 <div className="grid grid-cols-4 gap-4">
                   {imageData.map((image, index) => (
                     <div
@@ -407,8 +419,8 @@ const Test = () => {
                         className="curson-pointer rounded-md"
                         src={image.src}
                         alt={image.alt}
-                        width={200}
-                        height={300}
+                        width={180}
+                        height={200}
                       />
                     </div>
                   ))}
@@ -418,7 +430,7 @@ const Test = () => {
                   onClick={handleNext}
                   className="relative top-20"
                 >
-                  <Image src={btn1} alt="next" width={250} />
+                  <Image src={btn1} alt="next" width={200} />
                 </button>
               </div>
               {/* <input
@@ -490,12 +502,12 @@ const Test = () => {
                 <div className="relative z-20 bottom-28">
                   {/* <Image className="" src={btnUpload} alt="upload" width={80} /> */}
                   <label className="cursor-pointer">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <div className="flex flex-col items-center justify-center pt-12">
                       <Image
                         src={btnUpload}
                         alt="camera"
-                        width={100}
-                        height={100}
+                        width={80}
+                        height={80}
                       />
                     </div>
                     <input
@@ -665,19 +677,19 @@ const Test = () => {
                     // objectFit="cover"
                     src={`${resultImage}`}
                     alt="Result"
+                    onClick={() => openLightbox()}
                   />
-
-                  {/* The frame overlay */}
-                  {/* <div className="absolute top-0 left-0 right-0 bottom-0">
-                    <Image
-                      className="rounded-lg"
-                      src={frame} // The path to your frame image
-                      width={500}
-                      height={500}
-                      // objectFit="contain"
-                      alt="Frame"
-                    />
-                  </div> */}
+                  {isOpen && (
+                    <LightBox isOpen={isOpen} onClose={closeLightbox}>
+                      <Image
+                        className="rounded-lg"
+                        width={750}
+                        height={400}
+                        src={resultImage}
+                        alt="Result"
+                      />
+                    </LightBox>
+                  )}
                 </div>
                 <button
                   disabled={selectedImageId === null}

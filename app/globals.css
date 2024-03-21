@@ -217,8 +217,8 @@ body {
   position: absolute;
   top: 40px;
   right: 40px;
-  background: rgb(139, 91, 251);
-  color: #fff; /* White text */
+  background: rgb(255, 255, 255);
+  color: #000; /* White text */
   border: none;
   padding: 5px 10px;
   cursor: pointer;
