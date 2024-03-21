@@ -65,14 +65,14 @@ const imageData = [
     src: f5,
     alt: "Description for Image 1",
     prompt:
-      "white woman soccer player, on field alone, sport realistic banner::3 photorealistic::3 backlight::3 --aspect 1:1 --version 6 --quality .5",
+      "white soccer player woman stands on field alone, in frantic action on stadium with flashlights, looking at camera while kicking ball, blury background, chasing ball, focus on face --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 5,
     src: f4,
     alt: "Description for Image 2",
     prompt:
-      "white man soccer player, on field alone, sport realistic banner::3 photorealistic::3 backlight::3 --aspect 1:1 --version 6 --quality .5",
+      "white soccer player man stands on field alone, in frantic action on stadium with flashlights, looking at camera while kicking ball, blury background, chasing ball, focus on face --aspect 1:1 --version 6 --quality .5",
   },
 
   {
@@ -87,7 +87,7 @@ const imageData = [
     src: f7,
     alt: "Description for Image 1",
     prompt:
-      "capture realistic a high-tension moment where a white male soccer goalkeeper which is alone on field leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
+      "capture realistic a high-tension moment where a white male soccer goalkeeper which is alone on field, leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 8,
@@ -210,6 +210,7 @@ const Test = () => {
     const selectedImage = imageData.find((image) => image.id === id);
     if (selectedImage) {
       setPrompt(selectedImage.prompt);
+      console.log(selectedImage.prompt);
     }
   };
 

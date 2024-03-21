@@ -14,10 +14,10 @@ const Lightbox: React.FC<LightboxProps> = ({ isOpen, children, onClose }) => {
       <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
         {children}
         <button
-          className="lightbox-close xl:text-lg lg:text-lg md:text-lg sm:text-md xs:text-sm"
+          className="lightbox-close font-bold xl:text-xl lg:text-lg md:text-lg sm:text-md xs:text-sm"
           onClick={onClose}
         >
-          Close
+          X
         </button>
       </div>
     </div>
