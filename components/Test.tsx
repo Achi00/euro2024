@@ -32,17 +32,21 @@ import btnSend from "../utils/buttons/btn_send.png";
 import btnUploadAgain from "../utils/buttons/btn_try_again.png";
 import btnPrint from "../utils/buttons/btn_print.png";
 import startAgain from "../utils/buttons/btn_play_again.png";
+import btnBackHome from "../utils/buttons/btn_back_to_home.png";
+import btnBack from "../utils/buttons/btn_previous.png";
 
 import frame from "../utils/frame.png";
 // footbal images
 import { f1, f2, f3, f4, f5, f6, f7, f8 } from "../utils/football/index";
 import LightBox from "./LightBox";
+import { removeBackground } from "../utils/bgRemoval";
 
 const imageData = [
   {
     id: 1,
     src: f1,
     alt: "Description for Image 1",
+    role: "gk",
     prompt:
       "capture realistic a high-tension moment where a white male soccer goalkeeper which is alone on field leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1",
   },
@@ -50,6 +54,7 @@ const imageData = [
     id: 2,
     src: f3,
     alt: "Description for Image 1",
+    role: "st",
     prompt:
       "white female paying soccer sitting in the middle of stadium alone, holding ball, in frantic action on stadium with flashlights, looking at camera, clear non blocking face ligheted, wide angle. Concept of sport, competition, motion, overcoming. Field presence effect, Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
@@ -57,44 +62,50 @@ const imageData = [
     id: 3,
     src: f2,
     alt: "Description for Image 2",
+    role: "st",
     prompt:
-      "white man soccer player standing alone on field, in frantic action on stadium with flashlights, kicking ball for winning goal, looking at camera, clear non blocking face ligheted, wide angle. Concept of sport, competition, motion, overcoming. Field presence effect, Nikon Z9 --aspect 1:1 --version 6 --quality .5",
+      "white man soccer player standing alone on field, looking at camera, in frantic action on stadium with flashlights, kicking ball for winning goal, clear non blocking, face ligheted, wide angle. Concept of sport, competition, motion, overcoming. Field presence effect, Nikon Z9 --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 4,
     src: f5,
     alt: "Description for Image 1",
+    role: "st",
     prompt:
-      "white soccer player woman stands on field alone, in frantic action on stadium with flashlights, looking at camera while kicking ball, blury background, chasing ball, focus on face --aspect 1:1 --version 6 --quality .5",
+      "white soccer player woman stands on field alone, in frantic action on stadium with flashlights, looking at camera while kicking ball, blury background, chasing ball, focus on face which is clear and lighted --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 5,
     src: f4,
     alt: "Description for Image 2",
+    role: "st",
     prompt:
-      "white soccer player man stands on field alone, in frantic action on stadium with flashlights, looking at camera while kicking ball, blury background, chasing ball, focus on face --aspect 1:1 --version 6 --quality .5",
+      "white soccer player man stands on field alone, in frantic action on stadium with flashlights, looking at camera while kicking ball, blury background, chasing ball, focus on face which is clear and lighted --aspect 1:1 --version 6 --quality .5",
   },
 
   {
     id: 6,
     src: f6,
     alt: "Description for Image 2",
+    role: "st",
     prompt:
-      "Capture a decisive moment right before a penalty kick in a soccer game. The scene zooms in on the white female player's face which stands on field alone, showing a mix of concentration and calmness, with eyes fixed on the goal. The background features stadium behind, none behind, all blurred to keep the focus on the player. The stadium's lighting casts dramatic shadows, emphasizing the high stakes of the shot, with the soccer ball at the player's feet, ready to be kicked. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
+      "Capture a decisive moment right before a penalty kick in a soccer game. The scene zooms in on the white female player's face which stands on field alone, face should be lighted and clear showing a mix of concentration and calmness, with eyes fixed on the goal. The background features stadium behind, none behind, all blurred to keep the focus on the player. The stadium's lighting casts dramatic shadows, emphasizing the high stakes of the shot, with the soccer ball at the player's feet, ready to be kicked. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 7,
     src: f7,
     alt: "Description for Image 1",
+    role: "gk",
     prompt:
-      "capture realistic a high-tension moment where a white male soccer goalkeeper which is alone on field, leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
+      "capture realistic a high-tension moment where a white male soccer goalkeeper which is alone on field, leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, which is visible and lighted, etched with determination and focus. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
   {
     id: 8,
     src: f8,
     alt: "Description for Image 2",
+    role: "gk",
     prompt:
-      "capture realistic a high-tension moment where a white female soccer goalkeeper which is alone on field leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
+      "capture realistic a high-tension moment where a white female soccer goalkeeper which is alone on field leaps towards the upper corner of the goal in a spectacular save attempt. The focus is on the goalkeeper's face, which is visible and lighted, etched with determination and focus, as they stretch to their limits to block a powerful shot. The background is a blur of the stadium lights and cheering crowd, with the soccer ball frozen in flight, inches from the goalkeeper's fingertips, but not covering face. The scene is lit with the dramatic contrast of stadium lights, highlighting the athleticism and heroism of the moment. Nikon Z9, --aspect 1:1 --version 6 --quality .5",
   },
 ];
 
@@ -123,7 +134,6 @@ const Test = () => {
   const [isChecked, setIsChecked] = useState(true);
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [isInfoClosed, setisInfoClosed] = useState(false);
   // check lightbox
   const [isPrintDisabled, setIsPrintDisabled] = useState(false);
 
@@ -135,6 +145,12 @@ const Test = () => {
   const [selectedImageId, setSelectedImageId] = useState<
     number | undefined | null
   >(null);
+  const [selecterImageRole, setSelecterImageRole] = useState("");
+
+  // disable email button
+  const [disableEmail, setDisableEmail] = useState(false);
+  // disable print button
+  const [disablePrint, setDisablePrint] = useState(false);
 
   // toggle between input and microphone
   const handleToggle = () => {
@@ -149,6 +165,10 @@ const Test = () => {
     if (step < 8) setStep(step + 1);
   };
 
+  const handleBack = () => {
+    if (step > 1) setStep(step - 1);
+  };
+
   const openLightbox = () => {
     setIsOpen(true);
   };
@@ -156,6 +176,14 @@ const Test = () => {
   const closeLightbox = () => {
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    if (step === 1) {
+      setDisableEmail(false);
+      setDisablePrint(false);
+      // Any other state resets or logic related to moving to step 1
+    }
+  }, [step]);
 
   // Function to handle the API response
   const handleResponse = async (response: any) => {
@@ -210,7 +238,9 @@ const Test = () => {
     const selectedImage = imageData.find((image) => image.id === id);
     if (selectedImage) {
       setPrompt(selectedImage.prompt);
+      setSelecterImageRole(selectedImage.role);
       console.log(selectedImage.prompt);
+      console.log(selectedImage.role);
     }
   };
 
@@ -224,40 +254,59 @@ const Test = () => {
     }
   };
 
-  const handlePromptChange = (e: any) => {
-    setPrompt(e.target.value);
-  };
-
   const handleSubmit = async () => {
     if (!image) {
       setErrorMessage("Image missing");
       return;
     }
 
-    // Only show the loading toast after passing the validation checks
-
-    const formData = new FormData();
-    formData.append("userImage", image);
-    formData.append("prompt", prompt);
-    formData.append("name", name);
-    // formData.append("email", email);
     try {
       setLoading(true);
       setPromptInputClass("");
       setErrorMessage("");
-      const response = await fetch(
-        "https://abovedigital-1696444393502.ew.r.appspot.com/generate-and-swap-face",
-        // "http://localhost:8080/generate-and-swap-face",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
 
-      await handleResponse(response);
-      setLoading(false);
-      setName("");
-      setEmail("");
+      // Remove background from the user's image
+      const processedImage = await removeBackground(image);
+
+      if (processedImage.success && processedImage.processedImage) {
+        // Background removal was successful and processedImage is not null
+        // Create a new FormData object with the processed image
+        const generateFormData = new FormData();
+        generateFormData.append(
+          "userImage",
+          processedImage.processedImage,
+          "processed_image.png"
+        );
+        generateFormData.append("prompt", prompt);
+        generateFormData.append("name", name);
+        generateFormData.append("role", selecterImageRole);
+
+        const generateResponse = await fetch(
+          "https://abovedigital-1696444393502.ew.r.appspot.com/generate-and-swap-face",
+          {
+            method: "POST",
+            body: generateFormData,
+          }
+        );
+
+        if (generateResponse.ok) {
+          // Image generation was successful
+          await handleResponse(generateResponse);
+          setLoading(false);
+          setName("");
+          setEmail("");
+        } else {
+          // Image generation failed
+          setLoading(false);
+          console.error("Image generation failed");
+          toast.error("An error occurred while generating the image.");
+        }
+      } else {
+        // Background removal failed or processedImage is null
+        setLoading(false);
+        console.error("Background removal failed");
+        toast.error("An error occurred while removing the background.");
+      }
     } catch (error) {
       setLoading(false);
       console.error("Request failed:", error);
@@ -267,6 +316,10 @@ const Test = () => {
 
   const handleEmail = async (e: any) => {
     e.preventDefault();
+    setDisableEmail(true);
+    if (disablePrint) {
+      setStep(1);
+    }
 
     try {
       setEmailLoading(true);
@@ -316,8 +369,12 @@ const Test = () => {
   };
 
   const handlePrint = async () => {
+    setDisablePrint(true);
+    if (disableEmail) {
+      setStep(1);
+    }
     try {
-      setIsPrintDisabled(true);
+      // setIsPrintDisabled(true);
       const response = await fetch(
         "https://abovedigital-1696444393502.ew.r.appspot.com/v1/print",
         {
@@ -382,7 +439,7 @@ const Test = () => {
             <div className="fadeIn relative z-10 flex w-full min-h-screen justify-center items-center flex-col gap-5 pb-80">
               <div className="relative w-1/4">
                 <div className="w-full h-16 bg-gray-200 overflow-hidden">
-                  <div className="h-full bg-gray-500 progress-bar"></div>
+                  <div className="h-full bg-gray-400 progress-bar"></div>
                 </div>
               </div>
             </div>
@@ -460,8 +517,15 @@ const Test = () => {
             (resultImage ? null : imageUrl ? (
               <div className="flex flex-col gap-10 justify-center items-center">
                 <Image className="absolute inset-0" src={bg4} alt="bg4" fill />
+
+                <button
+                  onClick={handleBack}
+                  className="absolute w-[300px] h-14 inset-0 z-10 top-1/2 left-24"
+                >
+                  <Image src={btnBack} alt="bg3" width={250} />
+                </button>
                 {!loading && (
-                  <div className="flex flex-col gap-10 absolute top-1/3 mt-20 right-56">
+                  <div className="flex flex-col gap-10 absolute top-1/3 mt-20 right-32">
                     {/* upload again button */}
                     <label className="cursor-pointer">
                       <Image
@@ -486,12 +550,12 @@ const Test = () => {
                     </button>
                   </div>
                 )}
-                <div className="relative left-16 z-10 w-full flex items-center justify-center mr-24">
+                <div className="relative left-16 z-10 w-full flex items-center justify-center mr-28">
                   {!loading && (
                     <img
                       src={imageUrl}
                       alt="Preview"
-                      style={{ maxWidth: "100%", maxHeight: "450px" }}
+                      style={{ maxWidth: "450px" }}
                       className="pt-10"
                     />
                   )}
@@ -501,6 +565,12 @@ const Test = () => {
               // Render the image upload section when neither imageUrl nor resultImage is set
               <div className="flex flex-col xl:gap-[5vmin] lg:gap-[5vmin] md:gap-[8vmin] sm:gap-[5vmin] xs:gap-[10vmin]  fadeIn items-center justify-center w-[250px]">
                 <Image className="absolute inset-0" src={bg3} alt="bg3" fill />
+                <button
+                  onClick={handleBack}
+                  className="absolute w-[300px] h-14 inset-0 z-10 top-1/2 left-24"
+                >
+                  <Image src={btnBack} alt="bg3" width={250} />
+                </button>
                 <div className="relative z-20 bottom-28">
                   {/* <Image className="" src={btnUpload} alt="upload" width={80} /> */}
                   <label className="cursor-pointer">
@@ -623,7 +693,7 @@ const Test = () => {
                     Start Over
                   </button>
                 </div> */}
-                <div className="flex flex-col gap-10 w-[42%]">
+                <div className="flex flex-col gap-10 w-[42%] pt-14">
                   <input
                     type="name"
                     id="name"
@@ -643,20 +713,34 @@ const Test = () => {
                     autoComplete="off"
                   />
                   <button
-                    className={`flex gap-2 items-center justify-center  text-white font-bold py-2 px-4 bg-transparent pt-5`}
+                    className={`${
+                      disableEmail ? "opacity-0" : "opacity-100"
+                    } flex gap-2 items-center justify-center  text-white font-bold py-2 px-4 bg-transparent pt-5`}
                     type="button"
-                    disabled={!email || !name || emailLoading}
+                    disabled={!email || !name || emailLoading || disableEmail}
                     onClick={handleEmail}
                   >
                     <Image src={btnSend} alt="btnSend" width={250} />
                   </button>
                   <button
-                    className={`flex gap-2 items-center justify-center  text-white font-bold py-2 px-4 bg-transparent pt-5`}
+                    className={`${
+                      isPrintDisabled || disablePrint
+                        ? "opacity-0"
+                        : "opacity-100"
+                    } flex gap-2 items-center justify-center  text-white font-bold py-2 px-4 bg-transparent pt-5`}
                     type="button"
                     onClick={handlePrint}
-                    disabled={isPrintDisabled}
+                    disabled={isPrintDisabled || disablePrint}
                   >
                     <Image src={btnPrint} alt="btnSend" width={650} />
+                  </button>
+                </div>
+                <div className="absolute inset-0 w-full min-h-screen">
+                  <button
+                    onClick={startOver}
+                    className="absolute w-[500px] h-14 z-10 top-1/2 left-[35%]"
+                  >
+                    <Image src={btnBackHome} alt="bg3" width={500} />
                   </button>
                 </div>
               </div>
@@ -668,15 +752,19 @@ const Test = () => {
           {resultImage && step !== 4 && step !== 5 && (
             <div className="absolute w-full min-h-screen">
               <Image className="absolute inset-0" src={bg6} alt="bg6" fill />
+              <button
+                onClick={handleBack}
+                className="absolute w-[300px] h-14 inset-0 z-10 top-1/2 left-24"
+              >
+                <Image src={btnBack} alt="bg3" width={250} />
+              </button>
               <div className="relative flex pt-20 items-center justify-center z-10 min-h-screen">
                 <div className="absolute pb-10 h-1/2">
                   {/* The image that you want to show inside the frame */}
                   <Image
                     className="rounded-lg"
-                    // fill
                     width={430}
                     height={430}
-                    // objectFit="cover"
                     src={`${resultImage}`}
                     alt="Result"
                     onClick={() => openLightbox()}

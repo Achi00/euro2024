@@ -240,5 +240,5 @@ body {
 
 .progress-bar {
   width: 0; /* Start from 0 */
-  animation: fill 40s linear forwards;
+  animation: fill 60s linear forwards;
 }
