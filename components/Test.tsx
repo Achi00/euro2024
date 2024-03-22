@@ -318,7 +318,13 @@ const Test = () => {
     e.preventDefault();
     setDisableEmail(true);
     if (disablePrint) {
-      setStep(1);
+      setStep(1); // Navigate to the prompt input step
+      setResultImage(null);
+      setPrompt("");
+      setImage(null);
+      setImageUrl(undefined);
+      setIsChecked(false);
+      setSelectedImageId(null);
     }
 
     try {
@@ -371,7 +377,13 @@ const Test = () => {
   const handlePrint = async () => {
     setDisablePrint(true);
     if (disableEmail) {
-      setStep(1);
+      setStep(1); // Navigate to the prompt input step
+      setResultImage(null);
+      setPrompt("");
+      setImage(null);
+      setImageUrl(undefined);
+      setIsChecked(false);
+      setSelectedImageId(null);
     }
     try {
       // setIsPrintDisabled(true);
@@ -778,7 +790,7 @@ const Test = () => {
         </div>
       </div>
       {/* <div className="flex"> */}
-      {step === 5 && (
+      {/* {step === 5 && (
         <div className="absolute inset-0 z-10 w-full min-h-screen">
           <Image className="absolute inset-0" src={bg8} alt="bg8" fill />
 
@@ -790,7 +802,7 @@ const Test = () => {
             />
           </button>
         </div>
-      )}
+      )} */}
       {/* </div> */}
       {/* Navigation Buttons */}
       {/* <div className="flex gap-5 pb-5 pt-2">
