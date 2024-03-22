@@ -360,7 +360,7 @@ const Test = () => {
       setEmail("");
       setName("");
       setEmailLoading(false);
-      setStep(5); // Assuming `setStep` updates some state to control UI flow
+      // setStep(5); // Assuming `setStep` updates some state to control UI flow
     } catch (error) {
       console.error("Failed to send email or update document", error);
       toast.error("Failed to send email or update document");
