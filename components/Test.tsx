@@ -118,9 +118,9 @@ const Test = () => {
   const [name, setName] = useState<string>("name");
   const [email, setEmail] = useState<string>("email");
   // final image state
-  //   const [resultImage, setResultImage] = useState<string | null>(
-  //     "https://storage.googleapis.com/imaginarium-bucket/1710880377727-7455215612621995.jpg"
-  //   );
+  // const [resultImage, setResultImage] = useState<string | null>(
+  //   "https://storage.googleapis.com/imaginarium-bucket/1710880377727-7455215612621995.jpg"
+  // );
   const [resultImage, setResultImage] = useState<string | null>("");
   // easy authentication
   // steps for show previous or next jsx element
@@ -496,20 +496,6 @@ const Test = () => {
                   <Image src={btn1} alt="next" width={200} />
                 </button>
               </div>
-              {/* <input
-                type="text"
-                className={`bg-gray-50 border fadeIn border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block xl:w-3/4 lg:w-full md:w-full sm:full xs:w-[150%] p-2.5 outline-violet-700 ${promptInputClass}`}
-                value={prompt}
-                onChange={handlePromptChange}
-                placeholder="Write your imagination"
-              />
-
-              <button
-                onClick={handleToggle}
-                className=" border border-violet-900 p-2 rounded-md text-black"
-              >
-                {isUsingSpeech ? "or write your imagination" : "Try Microphone"}
-              </button> */}
             </div>
           )}
           {/* upload image & submit */}
@@ -693,7 +679,7 @@ const Test = () => {
                     Start Over
                   </button>
                 </div> */}
-                <div className="flex flex-col gap-10 w-[42%] pt-14">
+                <div className="flex flex-col gap-8 w-[42%] pt-44">
                   <input
                     type="name"
                     id="name"
@@ -724,25 +710,23 @@ const Test = () => {
                   </button>
                   <button
                     className={`${
-                      isPrintDisabled || disablePrint
-                        ? "opacity-0"
-                        : "opacity-100"
-                    } flex gap-2 items-center justify-center  text-white font-bold py-2 px-4 bg-transparent pt-5`}
+                      disablePrint ? "opacity-0" : "opacity-100"
+                    } flex gap-2 items-center justify-center cursor-pointer  text-white font-bold py-2 px-4 bg-transparent pt-5`}
                     type="button"
                     onClick={handlePrint}
-                    disabled={isPrintDisabled || disablePrint}
+                    // disabled={isPrintDisabled}
                   >
                     <Image src={btnPrint} alt="btnSend" width={650} />
                   </button>
                 </div>
-                <div className="absolute inset-0 w-full min-h-screen">
-                  <button
-                    onClick={startOver}
-                    className="absolute w-[500px] h-14 z-10 top-1/2 left-[35%]"
-                  >
-                    <Image src={btnBackHome} alt="bg3" width={500} />
-                  </button>
-                </div>
+              </div>
+              <div className="relative z-20 flex items-center justify-center w-full h-[150px]">
+                <button
+                  onClick={startOver}
+                  className="w-[500px] h-14 z-10 top-1/2"
+                >
+                  <Image src={btnBackHome} alt="bg3" width={500} />
+                </button>
               </div>
             </>
           )}
