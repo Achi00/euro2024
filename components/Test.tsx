@@ -282,7 +282,7 @@ const Test = () => {
         generateFormData.append("role", selecterImageRole);
 
         const generateResponse = await fetch(
-          "http://localhost:8080/generate-and-swap-face",
+          "https://abovedigital-1696444393502.ew.r.appspot.com/generate-and-swap-face",
           {
             method: "POST",
             body: generateFormData,
@@ -331,12 +331,15 @@ const Test = () => {
       setEmailLoading(true);
 
       // Existing code to send email
-      const emailResponse = await axios.post("http://localhost:8080/v1/mail", {
-        toEmail: email,
-        subject: "Unilever Euro 2024",
-        message: "Your Generated Image",
-        imageUrl: resultImage,
-      });
+      const emailResponse = await axios.post(
+        "https://abovedigital-1696444393502.ew.r.appspot.com/v1/mail",
+        {
+          toEmail: email,
+          subject: "Unilever Euro 2024",
+          message: "Your Generated Image",
+          imageUrl: resultImage,
+        }
+      );
 
       //   console.log("Email sent successfully", emailResponse.data);
 
