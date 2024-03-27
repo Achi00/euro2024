@@ -467,6 +467,7 @@ const Test = ({ printerId }: any) => {
             >
               <Image src={btn1} alt="next" width={250} />
             </button>
+            <p className="absolute z-10 text-4xl">{printerId}</p>
           </div>
         )}
 
