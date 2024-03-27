@@ -191,7 +191,7 @@ const Hero = () => {
     try {
       setLoading(true); // Start loading before the request
       const response = await fetch(
-        "https://abovedigital-1696444393502.ew.r.appspot.com/generate-and-swap-face",
+        "http://localhost:8080/generate-and-swap-face",
         {
           method: "POST",
           body: formData,

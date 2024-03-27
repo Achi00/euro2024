@@ -1,66 +1,67 @@
 "use client";
-import React, { useState } from "react";
-import axios from "axios";
 
-const page = () => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [processedImage, setProcessedImage] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+import React, { useRef, useState } from "react";
+import { removeBackground } from "../../utils/bgRemoval";
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-    setSelectedImage(file);
-  };
+const Page = () => {
+  const [processedImageUrl, setProcessedImageUrl] = useState<string | null>(
+    null
+  );
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleRemoveBackground = async () => {
-    if (!selectedImage) return;
-
-    const formData = new FormData();
-    formData.append("image", selectedImage);
-
-    const options = {
-      method: "POST",
-      url: "https://background-removal4.p.rapidapi.com/v1/results",
-      params: { mode: "fg-image" },
-      headers: {
-        "X-RapidAPI-Key": "532606fd5amshbfdbc1bd5ff8f44p190eb2jsnc5d1642e27ba",
-        "X-RapidAPI-Host": "background-removal4.p.rapidapi.com",
-        "Content-Type": "multipart/form-data",
-      },
-      data: formData,
-    };
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    console.log("File input changed"); // Debug log
+    const file = event.target.files ? event.target.files[0] : null;
+    if (!file) {
+      console.log("No file selected");
+      return;
+    }
 
     try {
-      setLoading(true);
-      const response = await axios.request(options);
-      console.log("API Response Data:", response.data);
-
-      const base64Image = response.data.results[0].entities[0].image;
-      const imageUrl = `data:image/png;base64,${base64Image}`;
-      setProcessedImage(imageUrl);
-
-      setLoading(false);
+      console.log("Calling removeBackground with file", file);
+      const { success, processedImage } = await removeBackground(file);
+      if (success && processedImage) {
+        const imageUrl = URL.createObjectURL(processedImage);
+        setProcessedImageUrl(imageUrl);
+        console.log("Image processed and set to state");
+      } else {
+        alert("Failed to process the image.");
+      }
     } catch (error) {
-      setLoading(false);
-      console.error(error);
+      console.error("Error processing image:", error);
+      alert("An error occurred while processing the image.");
     }
   };
 
   return (
-    <div className="w-full min-h-screen">
-      <h1>Remove Background</h1>
-      <input type="file" onChange={handleImageUpload} />
+    <div className="w-full min-h-screen flex flex-col items-center justify-center gap-4">
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageUpload}
+        ref={fileInputRef}
+        style={{ display: "none" }}
+      />
       <button
-        disabled={!selectedImage}
-        className="bg-gray-400 p-2 rounded-lg"
-        onClick={handleRemoveBackground}
+        className="bg-blue-500 text-white p-2 rounded"
+        onClick={() => {
+          console.log("Upload button clicked");
+          fileInputRef.current?.click();
+        }}
       >
-        Remove Background
+        Upload Image
       </button>
-      {processedImage && <img src={processedImage} alt="Processed Image" />}
-      {loading && <p className="text-4xl">Loading...</p>}
+      {processedImageUrl && (
+        <img
+          src={processedImageUrl}
+          alt="Processed Image"
+          style={{ maxWidth: "100%", maxHeight: "96px" }}
+        />
+      )}
     </div>
   );
 };
 
-export default page;
+export default Page;

@@ -1,4 +1,3 @@
-// bgRemoval.ts
 import axios from "axios";
 
 export const removeBackground = async (
@@ -28,17 +27,8 @@ export const removeBackground = async (
       response.data.results[0].entities[0].image
     ) {
       const base64Image = response.data.results[0].entities[0].image;
-
-      // Convert base64 to Blob
-      const byteCharacters = atob(base64Image);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const processedImageBlob = new Blob([byteArray], { type: "image/png" });
-
-      return { success: true, processedImage: processedImageBlob };
+      const croppedImageBlob = await cropImage(base64Image, 20, 20);
+      return { success: true, processedImage: croppedImageBlob };
     } else {
       return { success: false, processedImage: null };
     }
@@ -46,4 +36,48 @@ export const removeBackground = async (
     console.error("Background removal failed:", error);
     return { success: false, processedImage: null };
   }
+};
+
+const cropImage = async (
+  base64Image: string,
+  cropLeft: number,
+  cropRight: number
+): Promise<Blob> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      // Check if ctx is not null
+      if (!ctx) {
+        reject(new Error("Failed to get canvas context"));
+        return;
+      }
+
+      canvas.width = img.width - cropLeft - cropRight;
+      canvas.height = img.height;
+
+      ctx.drawImage(
+        img,
+        cropLeft,
+        0,
+        canvas.width,
+        canvas.height,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      canvas.toBlob((blob) => {
+        if (blob) {
+          resolve(blob);
+        } else {
+          reject(new Error("Canvas to Blob conversion failed"));
+        }
+      }, "image/png");
+    };
+    img.src = `data:image/png;base64,${base64Image}`;
+  });
 };
