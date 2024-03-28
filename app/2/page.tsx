@@ -8,7 +8,8 @@ import React from "react";
 const page = () => {
   const pathname = usePathname();
   const printerId = pathname.split("/").pop();
-  return <Test printerId={printerId} />;
+  const collection = "ΓΕΡΑΚΑΣ";
+  return <Test printerId={printerId} collectionName={collection} />;
 };
 
 export default page;

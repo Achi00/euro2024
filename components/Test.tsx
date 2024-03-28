@@ -109,7 +109,7 @@ const imageData = [
   },
 ];
 
-const Test = ({ printerId }: any) => {
+const Test = ({ printerId, collectionName }: any) => {
   const [image, setImage] = useState<File | null>(null);
   // for user image preview
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
@@ -281,6 +281,9 @@ const Test = ({ printerId }: any) => {
         generateFormData.append("name", name);
         generateFormData.append("role", selecterImageRole);
 
+        // Add the collection name to the FormData
+        generateFormData.append("collectionName", collectionName);
+
         const generateResponse = await fetch(
           "https://abovedigital-1696444393502.ew.r.appspot.com/generate-and-swap-face",
           {
@@ -344,7 +347,7 @@ const Test = ({ printerId }: any) => {
       //   console.log("Email sent successfully", emailResponse.data);
 
       // Firestore: Find the document with the matching imageUrl
-      const imagesCollectionRef = collection(db, "euro2024");
+      const imagesCollectionRef = collection(db, collectionName);
       const q = query(
         imagesCollectionRef,
         where("imageUrl", "==", resultImage)
@@ -403,6 +406,7 @@ const Test = ({ printerId }: any) => {
       }
 
       const data = await response.json();
+      toast.success(printerId);
       // Enable the button after 10 seconds
       setTimeout(() => setIsPrintDisabled(false), 10000);
     } catch (error) {
@@ -467,7 +471,6 @@ const Test = ({ printerId }: any) => {
             >
               <Image src={btn1} alt="next" width={250} />
             </button>
-            <p className="absolute z-10 text-4xl">{printerId}</p>
           </div>
         )}
 
@@ -729,7 +732,7 @@ const Test = ({ printerId }: any) => {
                     } flex gap-2 items-center justify-center cursor-pointer  text-white font-bold py-2 px-4 bg-transparent pt-5`}
                     type="button"
                     onClick={handlePrint}
-                    // disabled={isPrintDisabled}
+                    disabled={disablePrint}
                   >
                     <Image src={btnPrint} alt="btnSend" width={650} />
                   </button>

@@ -5,7 +5,6 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main className="flex flex-col min-h-screen items-center justify-center gap-6">
-      <h1 className="text-4xl font-bold pt-20">Choose Location</h1>
       <div className="flex min-h-screen items-center justify-center gap-6">
         <Test />
 
