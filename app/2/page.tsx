@@ -6,9 +6,8 @@ import Test from "@/components/Test";
 import React from "react";
 
 const page = () => {
-  const pathname = usePathname();
-  const printerId = pathname.split("/").pop();
   const collection = "ΓΕΡΑΚΑΣ";
+  const printerId = "73191248";
   return <Test printerId={printerId} collectionName={collection} />;
 };
 
